@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solven.app - Real Estate Automation Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pdf-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #2d2d2d;
+            overflow: hidden;
+        }
+
+        .page {
+            padding: 20mm;
+            min-height: 297mm;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            position: relative;
+            box-sizing: border-box;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 10mm;
+            right: 20mm;
+            color: #666;
+            font-size: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20mm;
+            padding-bottom: 10mm;
+            border-bottom: 2px solid #404040;
+            page-break-inside: avoid;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 5mm;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0f0f0;
+            margin-bottom: 5mm;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .about-solven {
+            background: #2a2a2a;
+            padding: 10mm;
+            border-radius: 8px;
+            margin: 15mm 0;
+            border: 1px solid #374151;
+            page-break-inside: avoid;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10mm;
+            margin: 15mm 0;
+            page-break-inside: avoid;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 10mm;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #374151;
+            page-break-inside: avoid;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 2mm;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .platform-highlight {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 10mm;
+            border-radius: 6px;
+            margin: 15mm 0;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+
+        .platform-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 3mm;
+        }
+
+        .platform-desc {
+            color: #e0f2fe;
+            font-size: 12px;
+        }
+
+        .section {
+            margin-bottom: 20mm;
+            padding: 10mm;
+            background: #242424;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 10mm;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10mm;
+            margin: 10mm 0;
+            page-break-inside: avoid;
+        }
+
+        .feature-card {
+            background: #2a2a2a;
+            padding: 10mm;
+            border-radius: 6px;
+            border: 1px solid #374151;
+            page-break-inside: avoid;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5mm;
+        }
+
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5mm;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .feature-name {
+            font-weight: 600;
+            color: #93c5fd;
+        }
+
+        .benefit-list {
+            list-style: none;
+            margin: 5mm 0;
+        }
+
+        .benefit-list li {
+            padding: 2mm 0;
+            padding-left: 10mm;
+            position: relative;
+        }
+
+        .benefit-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15mm 0;
+            flex-wrap: nowrap;
+            page-break-inside: avoid;
+        }
+
+        .process-step {
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+            padding: 5mm;
+        }
+
+        .process-icon {
+            width: 30px;
+            height: 30px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin: 0 auto 5mm;
+            font-weight: bold;
+        }
+
+        .process-arrow {
+            font-size: 18px;
+            color: #666;
+            margin: 0 5mm;
+        }
+
+        .quote {
+            background: #2a2a2a;
+            padding: 10mm;
+            border-left: 4px solid #8b5cf6;
+            margin: 15mm 0;
+            font-style: italic;
+            color: #cbd5e1;
+            page-break-inside: avoid;
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            margin-bottom: 5mm;
+        }
+
+        .solution-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 5mm;
+            display: flex;
+            align-items: center;
+            padding: 5mm 0;
+            border-bottom: 2px solid #3b82f6;
+            margin-bottom: 15mm;
+        }
+
+        .solution-title .number {
+            background: #3b82f6;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10mm;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        @media print {
+            body {
+                background: #1a1a1a;
+                color: #e0e0e0;
+            }
+            
+            .pdf-container {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+            }
+            
+            .page {
+                padding: 20mm;
+                min-height: 297mm;
+                background: #1a1a1a;
+                color: #e0e0e0;
+                margin: 0;
+                border: none;
+                box-shadow: none;
+            }
+            
+            .page:last-child {
+                page-break-after: auto;
+            }
+            
+            .page-number {
+                display: block;
+            }
+            
+            .header {
+                border-bottom: 2px solid #404040;
+            }
+            
+            .logo, .title, .subtitle {
+                color: #f0f0f0;
+            }
+            
+            .section {
+                background: #242424;
+                border-left: 4px solid #3b82f6;
+            }
+            
+            .feature-card {
+                background: #2a2a2a;
+                border: 1px solid #374151;
+            }
+            
+            .stat-card {
+                background: #2a2a2a;
+                border: 1px solid #374151;
+            }
+            
+            .about-solven {
+                background: #2a2a2a;
+                border: 1px solid #374151;
+            }
+            
+            .platform-highlight {
+                background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            }
+            
+            .section-title, .feature-name, .service-name {
+                color: #60a5fa;
+            }
+            
+            .benefit-list li::before {
+                color: #3b82f6;
+            }
+            
+            .solution-title {
+                color: #60a5fa;
+                border-bottom: 2px solid #3b82f6;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 15mm;
+                min-height: auto;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pdf-container">
+        <!-- Page 1 -->
+        <div class="page">
+            <div class="header">
+                <div class="logo">SOLVEN.APP</div>
+                <h1 class="title">Real Estate Automation Platform</h1>
+                <p class="subtitle">Complete Solution for Modern Real Estate Professionals</p>
+            </div>
+            
+            <div class="about-solven">
+                <h3 style="color: #60a5fa; margin-bottom: 5mm;">About Solven.app</h3>
+                <p>Solven.app is a solution hub that provides AI and automation solutions to businesses. We specialize in creating intelligent systems that streamline operations and increase efficiency across various industries, including real estate.</p>
+            </div>
+            
+            <div style="text-align: center; margin: 20mm 0;">
+                <h2 style="font-size: 24px; color: #f0f0f0; margin-bottom: 10mm;">Transform Your Real Estate Business</h2>
+                <p style="color: #94a3b8; max-width: 150mm; margin: 0 auto;">
+                    All-in-one platform to automate leads, manage clients, and close deals faster than ever before.
+                </p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Lead Response</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">90%</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5x</div>
+                    <div class="stat-label">Deal Velocity</div>
+                </div>
+            </div>
+            
+            <div class="platform-highlight">
+                <div class="platform-name">Solven.app</div>
+                <div class="platform-desc">The only platform you need for real estate automation</div>
+            </div>
+            
+            <div class="page-number">1</div>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="title">Platform Overview</h1>
+                <p class="subtitle">Complete Real Estate Automation Suite</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">What is Solven.app for Real Estate?</h3>
+                <p>Solven.app's real estate automation platform is a comprehensive solution designed specifically for agents and brokers who want to streamline their operations, increase efficiency, and close more deals. As part of our solution hub, we've tailored our AI and automation expertise specifically for the real estate industry.</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Core Philosophy</h3>
+                <p>We believe that real estate success comes from building relationships and closing deals, not from managing administrative tasks. Solven.app handles the routine so you can focus on what matters most.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">1</div>
+                        <div class="feature-name">All-in-One Platform</div>
+                    </div>
+                    <p>Everything you need in a single, integrated solution</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">2</div>
+                        <div class="feature-name">Intelligent Automation</div>
+                    </div>
+                    <p>AI-powered tools that learn and adapt to your workflow</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">3</div>
+                        <div class="feature-name">Seamless Integration</div>
+                    </div>
+                    <p>Works with your existing tools and systems</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Why Choose Solven.app?</h3>
+                <ul class="benefit-list">
+                    <li>Trusted by thousands of real estate professionals</li>
+                    <li>Proven results with measurable ROI</li>
+                    <li>Continuous innovation and updates</li>
+                    <li>24/7 customer support</li>
+                    <li>Secure and reliable infrastructure</li>
+                </ul>
+            </div>
+            
+            <div class="page-number">2</div>
+        </div>
+
+        <!-- Page 3 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="solution-title">
+                    <span class="number">1</span>
+                    Lead Management System
+                </h1>
+                <p class="subtitle">Capture, Qualify, and Convert Every Lead</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">AI-Powered Lead Capture</h3>
+                <p>Solven.app's intelligent system captures leads from multiple channels and qualifies them automatically.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">L</div>
+                        <div class="feature-name">Multi-Channel Lead Capture</div>
+                    </div>
+                    <div class="service-description">Comprehensive lead collection from all your marketing channels</div>
+                    <ul class="benefit-list">
+                        <li>Website forms and chat integration</li>
+                        <li>Social media lead capture</li>
+                        <li>WhatsApp and SMS lead collection</li>
+                        <li>Email campaign responses</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">Q</div>
+                        <div class="feature-name">Smart Lead Qualification</div>
+                    </div>
+                    <div class="service-description">Intelligent system to assess lead quality and intent</div>
+                    <ul class="benefit-list">
+                        <li>Automated qualification questions</li>
+                        <li>Budget and timeline assessment</li>
+                        <li>Buyer/seller intent analysis</li>
+                        <li>Priority scoring system</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">S</div>
+                        <div class="feature-name">Automated Scheduling System</div>
+                    </div>
+                    <div class="service-description">Seamless appointment booking and management</div>
+                    <ul class="benefit-list">
+                        <li>Automated scheduling workflows</li>
+                        <li>Calendar integration</li>
+                        <li>Reminders and confirmations</li>
+                        <li>Follow-up automation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Lead Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">60%</div>
+                    <div class="stat-label">Qualification Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Real Impact</h3>
+                <p>Agents using Solven.app report a 40% increase in qualified leads and a 30% reduction in lead response time.</p>
+            </div>
+            
+            <div class="page-number">3</div>
+        </div>
+
+        <!-- Page 4 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="solution-title">
+                    <span class="number">2</span>
+                    Property Recommendation Engine
+                </h1>
+                <p class="subtitle">AI-Powered Matching for Faster Sales</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Intelligent Property Matching</h3>
+                <p>Solven.app's AI analyzes client preferences and property characteristics to find the perfect matches.</p>
+            </div>
+            
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="process-icon">1</div>
+                    <h4>Client Input</h4>
+                    <p>Preferences & Needs</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">2</div>
+                    <h4>AI Analysis</h4>
+                    <p>Match Algorithm</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">3</div>
+                    <h4>Property Match</h4>
+                    <p>Best Fit Results</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Key Features</h3>
+                <ul class="benefit-list">
+                    <li>Personalized search experience</li>
+                    <li>Learning algorithm improves over time</li>
+                    <li>Multi-criteria matching parameters</li>
+                    <li>Real-time inventory updates</li>
+                    <li>Client preference tracking</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Example Scenario</h3>
+                <p>When a client specifies "3-bedroom in Banani with budget under 1.2 crore", our system instantly presents the most relevant listings from your portfolio.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">80%</div>
+                    <div class="stat-label">Match Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4x</div>
+                    <div class="stat-label">Faster Matching</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Client Satisfaction</div>
+                </div>
+            </div>
+            
+            <div class="page-number">4</div>
+        </div>
+
+        <!-- Page 5 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="solution-title">
+                    <span class="number">3</span>
+                    Document Automation
+                </h1>
+                <p class="subtitle">Streamline Your Paperwork with AI</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Automated Documentation</h3>
+                <p>Solven.app eliminates manual paperwork with intelligent document generation and management.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">C</div>
+                        <div class="feature-name">Contract Generation System</div>
+                    </div>
+                    <div class="service-description">Professional contracts generated instantly with client data</div>
+                    <ul class="benefit-list">
+                        <li>Pre-filled with client information</li>
+                        <li>Compliant with local regulations</li>
+                        <li>Customizable templates</li>
+                        <li>Instant generation capability</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">I</div>
+                        <div class="feature-name">Invoice Generation System</div>
+                    </div>
+                    <div class="service-description">Professional invoices created automatically</div>
+                    <ul class="benefit-list">
+                        <li>Professional formatting</li>
+                        <li>Automatic calculations</li>
+                        <li>Delivery integration</li>
+                        <li>Payment tracking</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">R</div>
+                        <div class="feature-name">Report Generation System</div>
+                    </div>
+                    <div class="service-description">Comprehensive business reports at your fingertips</div>
+                    <ul class="benefit-list">
+                        <li>Performance analytics</li>
+                        <li>Client activity reports</li>
+                        <li>Market analysis</li>
+                        <li>Monthly summaries</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">90%</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Errors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Click Process</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Impact on Workflow</h3>
+                <p>Agents save an average of 5 hours per week on administrative tasks, allowing more time for client interactions and deal closing.</p>
+            </div>
+            
+            <div class="page-number">5</div>
+        </div>
+
+        <!-- Page 6 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="solution-title">
+                    <span class="number">4</span>
+                    Communication Automation
+                </h1>
+                <p class="subtitle">Never Miss a Follow-Up Again</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Smart Follow-Up System</h3>
+                <p>Solven.app ensures consistent communication with intelligent follow-up automation.</p>
+            </div>
+            
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="process-icon">A</div>
+                    <h4>Track</h4>
+                    <p>Communication History</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">B</div>
+                    <h4>Plan</h4>
+                    <p>Next Follow-Up</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="process-icon">C</div>
+                    <h4>Execute</h4>
+                    <p>Send Reminder</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Voice-to-CRM Integration</h3>
+                <p>Record voice notes on the go that automatically update your CRM:</p>
+                <div style="background: #2a2a2a; padding: 10mm; border-radius: 6px; margin: 10mm 0; border: 1px solid #374151; font-style: italic;">
+                    "Met with Mr. Ahmed, looking for a 3-bedroom in Banani, budget 1.2 crore."
+                </div>
+                <p style="margin-top: 10mm;"><strong>Result:</strong> Information automatically updates in your CRM.</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Communication Features</h3>
+                <ul class="benefit-list">
+                    <li>Automated follow-up sequences</li>
+                    <li>Personalized messaging</li>
+                    <li>Multichannel delivery</li>
+                    <li>Response tracking</li>
+                    <li>Re-engagement campaigns</li>
+                </ul>
+            </div>
+            
+            <div class="page-number">6</div>
+        </div>
+
+        <!-- Page 7 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="solution-title">
+                    <span class="number">5</span>
+                    CRM Integration
+                </h1>
+                <p class="subtitle">Seamless Workflow Management</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Custom CRM Automations</h3>
+                <p>Solven.app integrates with your existing CRM or provides our own solution tailored to your workflow.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">D</div>
+                        <div class="feature-name">Daily Data Sync</div>
+                    </div>
+                    <div class="service-description">Automatic synchronization of your data</div>
+                    <p>Automatically sync data with your CRM daily</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">F</div>
+                        <div class="feature-name">File Management System</div>
+                    </div>
+                    <div class="service-description">Automatic organization of your files</div>
+                    <p>Automatic creation/deletion of files as deals progress</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">N</div>
+                        <div class="feature-name">Notification Center</div>
+                    </div>
+                    <div class="service-description">Real-time alerts and updates</div>
+                    <p>Real-time alerts for new leads and important updates</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Integration Capabilities</h3>
+                <ul class="benefit-list">
+                    <li>Google Sheets integration</li>
+                    <li>Popular CRM systems</li>
+                    <li>Email marketing platforms</li>
+                    <li>Accounting software</li>
+                    <li>Calendar systems</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Custom Solutions</h3>
+                <p>"Tell us your routine — we'll automate it." We create custom workflows based on your specific business processes.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Workflow Efficiency</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Data Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Time Savings</div>
+                </div>
+            </div>
+            
+            <div class="page-number">7</div>
+        </div>
+
+        <!-- Page 8 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="solution-title">
+                    <span class="number">6</span>
+                    Website Enhancement
+                </h1>
+                <p class="subtitle">Smart Integration for Better Results</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Intelligent Website Features</h3>
+                <p>Solven.app seamlessly integrates with your website to enhance functionality and user experience.</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">+50%</div>
+                    <div class="stat-label">Lead Generation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+30%</div>
+                    <div class="stat-label">Engagement</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">+40%</div>
+                    <div class="stat-label">Conversions</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Enhancement Features</h3>
+                <ul class="benefit-list">
+                    <li>Lead collection automation</li>
+                    <li>Property recommendation engine</li>
+                    <li>Visitor chat capabilities</li>
+                    <li>Dynamic content personalization</li>
+                    <li>Performance analytics</li>
+                    <li>SEO optimization</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Multi-Platform Support</h3>
+                <p>Works seamlessly across all devices and platforms, ensuring your clients have the best experience regardless of how they access your site.</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Future-Ready</h3>
+                <p>Our website integration continues to evolve with new features and capabilities, ensuring your online presence stays ahead of the competition.</p>
+            </div>
+            
+            <div class="page-number">8</div>
+        </div>
+
+        <!-- Page 9 -->
+        <div class="page">
+            <div class="header">
+                <h1 class="title">Results & Pricing</h1>
+                <p class="subtitle">Proven ROI and Flexible Plans</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Proven Results</h3>
+                <p>Real estate professionals using Solven.app see significant improvements in their business metrics:</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Increase in Leads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <div class="stat-label">Faster Deal Closure</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">60%</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div class="stat-label">Revenue Growth</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Success Stories</h3>
+                <ul class="benefit-list">
+                    <li>"Increased my monthly closed deals by 50% in 3 months"</li>
+                    <li>"Reduced administrative time by 80% - now focus on clients"</li>
+                    <li>"Best investment I've made for my real estate business"</li>
+                    <li>"Client satisfaction scores improved significantly"</li>
+                    <li>"ROI paid for itself in the first month"</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Flexible Pricing</h3>
+                <ul class="benefit-list">
+                    <li>Free trial available</li>
+                    <li>Monthly or annual plans</li>
+                    <li>Custom enterprise solutions</li>
+                    <li>No setup fees</li>
+                    <li>Cancel anytime</li>
+                </ul>
+            </div>
+            
+            <div class="about-solven">
+                <h3 style="color: #60a5fa; margin-bottom: 5mm;">About Solven.app</h3>
+                <p>As a solution hub, Solven.app provides AI and automation solutions to businesses across various industries. Visit us at <a href="https://solven.app/" style="color: #60a5fa; text-decoration: none;">https://solven.app/</a> to explore our complete range of automation solutions.</p>
+            </div>
+            
+            <div class="platform-highlight">
+                <div class="platform-name">Solven.app</div>
+                <div class="platform-desc">The future of real estate automation is here</div>
+            </div>
+            
+            <div class="page-number">9</div>
+        </div>
+    </div>
+</body>
+</html>
+
